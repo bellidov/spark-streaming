@@ -1,2 +1,7 @@
 *.class
 *.log
+.idea
+metastore_db
+target
+derby.log
+*.iml
