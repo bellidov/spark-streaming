@@ -1,13 +1,13 @@
 package org.example
 
 import java.io.File
-
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.{BeforeAndAfterAll, MustMatchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.{BeforeAndAfterAll}
 
-class StreamReaderTest extends AnyFunSuite  with BeforeAndAfterAll with MockFactory with MustMatchers{
+class StreamReaderIntegrationTest extends AnyFunSpec with BeforeAndAfterAll with MockFactory with Matchers {
 
   val ResourcesDirectory = normalizePath(new File("src/test/resources"));
   val BasePathWithProtocol = s"file:///${normalizePath(new File("/tmp/testdata"))}"
@@ -31,7 +31,7 @@ class StreamReaderTest extends AnyFunSuite  with BeforeAndAfterAll with MockFact
     streamReader = new StreamReader(sparkSession, kafkaReader, expediaPath, outputPath)
   }
 
-  test("Tests the stream processing workflow: expected hotel_id") {
+  it("Tests the stream processing workflow: expected hotel_id") {
     (kafkaReader.read _).when(0, 1000).returns(getMockedKafkaJson())
     streamReader.run()
 
@@ -41,7 +41,7 @@ class StreamReaderTest extends AnyFunSuite  with BeforeAndAfterAll with MockFact
     actualHotelId must be ("[377957122049]")
   }
 
-  test("Tests the stream processing workflow: expected preference") {
+  it("Tests the stream processing workflow: expected preference") {
     (kafkaReader.read _).when(0, 1000).returns(getMockedKafkaJson())
     streamReader.run()
 
